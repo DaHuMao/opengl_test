@@ -1,9 +1,9 @@
 #ifndef RENDER_H_
 #define RENDER_H_
 
-#include "vertex_array.h"
-#include "index_buffer.h"
-#include "shader.h"
+#include "src/vertex_array.h"
+#include "src/index_buffer.h"
+#include "src/shader.h"
 
 class CustomRender {
 public:

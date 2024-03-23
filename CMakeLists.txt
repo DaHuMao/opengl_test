@@ -14,6 +14,7 @@ set(GLFW_DIR  /usr/local/Cellar/glfw/3.3.8)
 set(include_dir
   ${GLEW_DIR}/include
   ${GLFW_DIR}/include
+  ${CUR_DIR}
 )
 
 set(libs_dir
@@ -22,23 +23,23 @@ set(libs_dir
 )
 
 set(app_native_sources
-    ${CUR_DIR}/transform_test.cc
-    ${CUR_DIR}/vertex_buffer.h
-    ${CUR_DIR}/vertex_buffer.cc
-    ${CUR_DIR}/index_buffer.h
-    ${CUR_DIR}/index_buffer.cc
-    ${CUR_DIR}/vertex_array.h
-    ${CUR_DIR}/vertex_array.cc
-    ${CUR_DIR}/vertex_buffer_layout.h
-    ${CUR_DIR}/vertex_buffer_layout.cc
-    ${CUR_DIR}/shader.h
-    ${CUR_DIR}/shader.cc
-    ${CUR_DIR}/render.h
-    ${CUR_DIR}/render.cc
-    ${CUR_DIR}/texture_load.h
-    ${CUR_DIR}/texture_load.cc
-    ${CUR_DIR}/camera.h
-    ${CUR_DIR}/camera.cc
+    ${CUR_DIR}/example/transform_test.cc
+    ${CUR_DIR}/src/vertex_buffer.h
+    ${CUR_DIR}/src/vertex_buffer.cc
+    ${CUR_DIR}/src/index_buffer.h
+    ${CUR_DIR}/src/index_buffer.cc
+    ${CUR_DIR}/src/vertex_array.h
+    ${CUR_DIR}/src/vertex_array.cc
+    ${CUR_DIR}/src/vertex_buffer_layout.h
+    ${CUR_DIR}/src/vertex_buffer_layout.cc
+    ${CUR_DIR}/src/shader.h
+    ${CUR_DIR}/src/shader.cc
+    ${CUR_DIR}/src/render.h
+    ${CUR_DIR}/src/render.cc
+    ${CUR_DIR}/src/texture_load.h
+    ${CUR_DIR}/src/texture_load.cc
+    ${CUR_DIR}/src/camera.h
+    ${CUR_DIR}/src/camera.cc
     ${CUR_DIR}/third_party/stb_image/stb_image.h
     ${CUR_DIR}/third_party/stb_image/stb_image.cc
 )

@@ -5,16 +5,16 @@
 #include <thread>
 #include "third_party/glm/ext/matrix_clip_space.hpp"
 #include "third_party/glm/fwd.hpp"
-#include "vertex_array.h"
-#include "vertex_buffer.h"
-#include "index_buffer.h"
-#include "shader.h"
-#include "texture_load.h"
-#include "render.h"
-#include "camera.h"
 #include "third_party/glm/glm.hpp"
 #include "third_party/glm/gtc/matrix_transform.hpp"
 #include "third_party/glm/gtc/type_ptr.hpp"
+#include "src/vertex_array.h"
+#include "src/vertex_buffer.h"
+#include "src/index_buffer.h"
+#include "src/shader.h"
+#include "src/texture_load.h"
+#include "src/render.h"
+#include "src/camera.h"
 
 template <typename T, size_t N> char (&ArraySizeHelper(T (&array)[N]))[N];
 #define ARRAY_SIZE(array) (sizeof(ArraySizeHelper(array)))
@@ -217,9 +217,9 @@ int main(int argc, char *argv[]) {
         glm::vec3( 1.5f,  0.2f, -1.5f),
         glm::vec3(-1.3f,  1.0f, -1.5f)
     };
-    std::string work_path = "/Users/ztx/Desktop/workspace/opengl_test/";
-    std::string vertex_shader = work_path + "shader.vs";
-    std::string fragment_shader = work_path + "shader.frag";
+    std::string work_path = "../";
+    std::string vertex_shader = work_path + "example/shader.vs";
+    std::string fragment_shader = work_path + "example/shader.frag";
     TextureLoad texture_load0(work_path + "res/container.jpg");
     TextureLoad texture_load1(work_path + "res/awesomeface.jpg");
     VerTexBuffer vbo(positions, sizeof(positions));
