@@ -22,7 +22,7 @@ set(libs_dir
 )
 
 set(app_native_sources
-    ${CUR_DIR}/main1.cc
+    ${CUR_DIR}/transform_test.cc
     ${CUR_DIR}/vertex_buffer.h
     ${CUR_DIR}/vertex_buffer.cc
     ${CUR_DIR}/index_buffer.h

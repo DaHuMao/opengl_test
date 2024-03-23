@@ -7,6 +7,6 @@ uniform sampler2D selectTexture2;
 void main()
 {
   color = mix(texture(selectTexture1, ourTexture),
-            texture(selectTexture2, vec2(1.0 - ourTexture.x, ourTexture.y)), 0.5)
+            texture(selectTexture2, vec2(ourTexture.x, 1.0 - ourTexture.y)), 0.5)
               * vec4(ourColor, 1.0f);
 }

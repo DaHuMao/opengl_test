@@ -83,7 +83,7 @@ int main()
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
 
-            std::string vertexShader = 
+            std::string vertexShader =
             "#version 330 core\n"
             "layout (location = 0) in vec3 aPos;\n"
             //"layout (location = 1) in vec3 aColor;\n"
@@ -99,7 +99,7 @@ int main()
                  //"ourColor = aColor;\n"
                  "TexCoord = aTexCoord;\n"
             "}";
-    /*    std::string fragmentShader = 
+    /*    std::string fragmentShader =
             "#version 330 core\n"
             "uniform vec4 uColor;\n"
             "out vec4 FragColor;\n"
@@ -201,7 +201,7 @@ int main()
     glEnableVertexAttribArray(1);
 
 
-    // load and create a texture 
+    // load and create a texture
     // -------------------------
     unsigned int texture1, texture2;
     // texture 1
@@ -278,7 +278,7 @@ int main()
         // render
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // bind textures on corresponding texture units
         glActiveTexture(GL_TEXTURE0);
@@ -350,7 +350,7 @@ void processInput(GLFWwindow *window)
 // ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    // make sure the viewport matches the new window dimensions; note that width and 
+    // make sure the viewport matches the new window dimensions; note that width and
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
