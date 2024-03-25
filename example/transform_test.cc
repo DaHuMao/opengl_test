@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <thread>
+#include "src/const_data.h"
+#include "src/windows.h"
 #include "third_party/glm/ext/matrix_clip_space.hpp"
 #include "third_party/glm/fwd.hpp"
 #include "third_party/glm/glm.hpp"
@@ -43,25 +45,11 @@ GLfloat pitch  =  0.0f;
 GLfloat lastX  =  WIDTH  / 2.0;
 GLfloat lastY  =  HEIGHT / 2.0;
 GLfloat fov =  45.0f;
-bool keys[1024];
 
 // Deltatime
 GLfloat deltaTime = 0.0f;	// Time between current frame and last frame
 GLfloat lastFrame = 0.0f;  	// Time of last frame
-
-// Is called whenever a key is pressed/released via GLFW
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
-{
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, GL_TRUE);
-    if (key >= 0 && key < 1024)
-    {
-        if (action == GLFW_PRESS)
-            keys[key] = true;
-        else if (action == GLFW_RELEASE)
-            keys[key] = false;
-    }
-}
+bool* keys = getKey();
 
 void do_movement()
 {
@@ -112,8 +100,6 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     cameraPos.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     cameraPos.y = sin(glm::radians(pitch));
     cameraPos.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    std::cout << "pitch: " << pitch << " yaw: " << yaw << std::endl;
-    std::cout << cameraFront.x <<  " " << cameraFront.y << " " << cameraFront.z << std::endl;
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
@@ -134,76 +120,18 @@ void make_i(float* ptr, int N) {
 }
 
 int main(int argc, char *argv[]) {
-  GLFWwindow* window;
-  /* Initialize the library */
-  if (GLFW_TRUE != glfwInit())
-    return -1;
-
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-#ifdef __APPLE__
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-  /* Create a windowed mode window and its OpenGL context */
-  window = glfwCreateWindow(kScreenWidth, kScreenHeight, "Hello World", NULL, NULL);
-  glfwMakeContextCurrent(window);
+  GLFWwindow* window = CreateAndInit(kScreenWidth, kScreenHeight);
   // Set the required callback functions
-  glfwSetKeyCallback(window, key_callback);
   glfwSetCursorPosCallback(window, mouse_callback);
   glfwSetScrollCallback(window, scroll_callback);
 
   // GLFW Options
-  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   if (!window)
   {
-    glfwTerminate();
-    return -1;
-  }
-  if (GLEW_OK != glewInit()) {
     return -1;
   }
   {
     glEnable(GL_DEPTH_TEST);
-    constexpr size_t kPointCount = 8;
-    constexpr size_t kOneDimSize = 8;
-    float positions[kPointCount * kOneDimSize] = {
-        //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-        0.5f,  0.5f, 0.5f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
-        0.5f, -0.5f, 0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 右下
-        -0.5f, -0.5f, 0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 左下
-        -0.5f,  0.5f, 0.5f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,    // 左上
-        0.5f,  0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 1.0f,   // 右上
-        0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   0.0f, 0.0f,   // 右下
-        -0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 1.0f,   1.0f, 0.0f,   // 左下
-        -0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 0.0f,   1.0f, 1.0f    // 左上
-    };
-    uint32_t indices[] = {
-      // front
-      0, 1, 2,
-      2, 3, 0,
-
-      // right
-      4, 5, 1,
-      1, 0, 4,
-
-      // back
-      4, 5, 6,
-      6, 7, 4,
-
-      // left
-      6, 7, 3,
-      3, 2, 6,
-
-      // obove
-      0, 4, 7,
-      7, 3, 0,
-
-      // under
-      1, 5, 6,
-      6, 2, 1
-    };
 
     glm::vec3 cubePositions[] = {
         glm::vec3( 0.0f,  0.0f,  0.0f),
@@ -222,14 +150,14 @@ int main(int argc, char *argv[]) {
     std::string fragment_shader = work_path + "example/shader.frag";
     TextureLoad texture_load0(work_path + "res/container.jpg");
     TextureLoad texture_load1(work_path + "res/awesomeface.jpg");
-    VerTexBuffer vbo(positions, sizeof(positions));
+    VerTexBuffer vbo(kCubePositions, sizeof(kCubePositions));
     VerTexArray vao;
     VerTexBufferLayout layout;
     layout.Push<float>(3);
     layout.Push<float>(3);
     layout.Push<float>(2);
     vao.AddBuffer(layout);
-    VerTexIndexBuffer ibo(indices, ARRAY_SIZE(indices));
+    VerTexIndexBuffer ibo(kCubeIndices, ARRAY_SIZE(kCubeIndices));
     Shader shader(vertex_shader, fragment_shader);
     shader.Bind();
     shader.SetUniform1i("selectTexture1", 0);
