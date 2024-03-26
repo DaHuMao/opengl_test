@@ -1,7 +1,17 @@
-#include "src/windows.h"
-bool keys[1024];
+#include "src/gl_util.h"
+#include <iostream>
+static bool keys[1024];
 bool* getKey() {
   return keys;
+}
+
+bool GlCheckError() {
+  bool res = false;
+  while (GLenum error = glGetError()) {
+    res = true;
+    std::cout <<"[OpenGl Error]" << std::hex << error <<std::endl;
+  }
+  return res;
 }
 // Is called whenever a key is pressed/released via GLFW
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
