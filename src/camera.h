@@ -1,60 +1,45 @@
-#ifndef CAMERA_H_
-#define CAMERA_H_
-
-#include "third_party/glm/glm.hpp"
-#include "third_party/glm/gtc/matrix_transform.hpp"
-
-enum class CameraMovement {
-    kForWard,
-    kBackWard,
-    kLeft,
-    kRight
-};
-
-
+#ifndef SRC_CAMERA_H_
+#define SRC_CAMERA_H_
+#include "third_party/glm/ext/matrix_float4x4.hpp"
+#include "third_party/glm/gtc/type_ptr.hpp"
+#include <array>
+#include <iostream>
+#include <vector>
 class Camera {
-public:
-    Camera() = default;
-    inline void SetPosition(const glm::vec3& position) {
-        camera_position_ = position;
-    }
-
-    inline void SetFront(const glm::vec3& front) {
-        camera_front_ = front;
-    }
-
-    inline void SetWordUp(const glm::vec3& word_up) {
-        word_up_ =  word_up;
-    }
-
-    inline glm::mat4 GetViewMatrix() const {
-        return glm::lookAt(camera_position_,  camera_position_ + camera_front_,
-                camera_up_);
-    }
-
-    inline void SetMouseSensitivety(float mouse_sensitivety) {
-        mouse_sensitivety_ = mouse_sensitivety;
-    }
-
-    inline void SetMoveMentSpeed(float movement_speed) {
-        movement_speed_ = movement_speed;
-    }
-
-    void PorcessKeyboard(CameraMovement direction, float delta_time);
-    void ProcessMouseMovement(float xoffset, float yoffset, bool constrain_pitch = true);
-    void ProcessMouseScroll(float yoffset);
-private:
-    void UpdateCameraVectors();
-
-    glm::vec3 camera_position_ =  glm::vec3(0.0f, 0.0f, 3.0f);
-    glm::vec3 camera_front_ = glm::vec3(0.0f, 0.0f, -1.0f);
-    glm::vec3 camera_up_ =  glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 camera_right_ =  glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 word_up_ =  glm::vec3(0.0f, 1.0f, 0.0f);
-    float yaw_ = -90.0f;
-    float pitch_ = 0.0f;
-    float movement_speed_ = 2.5f;
-    float mouse_sensitivety_ = 0.1f;
+ public:
+  Camera() = default;
+  ~Camera() = default;
+  // pitch rotate x
+  // yaw rotate y
+  // roll roate z
+  Camera& RotateAroundX(float pitch);
+  Camera& RotateAroundY(float yaw);
+  Camera& RotateAroundZ(float roll);
+  Camera& ScaleCameraDistance(float scale_size) {
+    scale_size_ += scale_size;
+    return *this;
+  }
+  Camera& SetCameraCenter(const std::array<float, 3>& center) {
+    camera_center_ = glm::vec3(center[0], center[1], center[2]);
+    return *this;
+  }
+  Camera& MoveCenterX(float x_diff) {
+    camera_center_.x += x_diff;
+    return *this;
+  }
+  Camera& MoveCenterY(float y_diff) {
+    camera_center_.y += y_diff;
+    return *this;
+  }
+  float* GetViewMatrix() {
+    view_ = glm::lookAt(camera_front_ * scale_size_, camera_center_, camera_up_);
+    return glm::value_ptr(view_);
+  }
+ private:
+  float scale_size_ = 3.0f;
+  glm::mat4 view_;
+  glm::vec3 camera_center_ = glm::vec3(0.f, 0.f, 0.f);
+  glm::vec3 camera_front_ = glm::vec3(0.f, 0.f, 1.f);
+  glm::vec3 camera_up_ = glm::vec3(0.f, 1.f, 0.f);
 };
-
-#endif // CAMERA_H_
+#endif // SRC_CAMERA_H_

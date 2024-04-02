@@ -1,45 +1,25 @@
-#include "camera.h"
+#include "src/camera.h"
+#include "src/mat_util.h"
+#include "third_party/glm/ext/matrix_float4x4.hpp"
+#include "third_party/glm/ext/scalar_constants.hpp"
+#include "third_party/glm/matrix.hpp"
 
-void Camera::PorcessKeyboard(CameraMovement direction,float delta_time) {
-    float velocity = movement_speed_ * delta_time;
-    if (CameraMovement::kForWard == direction) {
-        camera_position_ += camera_front_ * velocity;
-    } else if (CameraMovement::kBackWard == direction) {
-        camera_position_ -= camera_front_ * velocity;
-    } else if (CameraMovement::kLeft == direction) {
-        camera_position_ -= camera_right_ * velocity; 
-    } else if (CameraMovement::kRight == direction) {
-        camera_position_ += camera_right_ * velocity;
-    }
+Camera& Camera::RotateAroundX(float pitch) {
+  if (pitch < -89) pitch = -89;
+  if (pitch > 89) pitch = 89;
+  auto camera_right = glm::cross(camera_up_, camera_front_);
+  camera_front_ = MatUtil::RotateVec(camera_front_, camera_right, pitch);
+  camera_up_ = MatUtil::RotateVec(camera_up_, camera_right, pitch);
+  return *this;
 }
 
-void Camera::ProcessMouseMovement(float xoffset, float yoffset, bool constrain_pitch) {
-    xoffset *= mouse_sensitivety_;
-    yoffset *= mouse_sensitivety_;
-    yaw_ += xoffset;
-    pitch_ += yoffset;
-    if (constrain_pitch) {
-        if (pitch_ > 89.0f) {
-            pitch_ = 89.0f;
-        }
-        if (pitch_ < -89.0f) {
-            pitch_ = -89.0f;
-        }
-    }
-    UpdateCameraVectors();
+Camera& Camera::RotateAroundY(float yaw) {
+  camera_front_ = MatUtil::RotateVec(camera_front_, camera_up_, yaw);
+  return *this;
 }
 
-void Camera::ProcessMouseScroll(float yoffset) {
-
+Camera& Camera::RotateAroundZ(float roll) {
+  camera_up_ = MatUtil::RotateVec(camera_up_, camera_front_, roll);
+  return *this;
 }
 
-void Camera::UpdateCameraVectors() {
-    glm::vec3 front;
-    front.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
-    front.y = sin(glm::radians(pitch_));
-    front.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
-    camera_front_ = glm::normalize(front);
-
-    camera_right_ = glm::normalize(glm::cross(camera_front_, word_up_));
-    camera_up_ = glm::normalize(glm::cross(camera_right_, camera_front_));
-}

@@ -2,6 +2,7 @@
 #define VERTEX_BUFFER_LAYOUT_H_
 
 #include "GL/glew.h"
+#include <cassert>
 #include <vector>
 
 struct VerTexBufferElement {

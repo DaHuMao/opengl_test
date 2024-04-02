@@ -42,6 +42,10 @@ set(app_native_sources
     ${CUR_DIR}/src/camera.cc
     ${CUR_DIR}/src/gl_util.h
     ${CUR_DIR}/src/gl_util.cc
+    ${CUR_DIR}/src/mat_util.h
+    ${CUR_DIR}/src/mat_util.cc
+    ${CUR_DIR}/src/windows.h
+    ${CUR_DIR}/src/windows.cc
     ${CUR_DIR}/third_party/stb_image/stb_image.h
     ${CUR_DIR}/third_party/stb_image/stb_image.cc
 )
